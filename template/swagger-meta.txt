@@ -1,0 +1,42 @@
+// Package classification Gravity Extractor RPC API.
+//
+// This application represents viable extractor methods.
+// Declared methods are compulsory for appropriate extractor functioning.
+//
+//
+// Terms Of Service:
+//
+// there are no TOS at this moment, use at your own risk we take no responsibility
+//
+//     Schemes: http, https
+//     Host: %s
+//     BasePath: /
+//     Version: 1.0
+//     License: MIT http://opensource.org/licenses/MIT
+//     Contact: %s <%s> https://%s
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+//     Security:
+//     - api_key:
+//
+//     SecurityDefinitions:
+//     api_key:
+//          type: apiKey
+//          name: KEY
+//          in: header
+//
+//     Extensions:
+//     x-meta-value: value
+//     x-meta-array:
+//       - value1
+//       - value2
+//     x-meta-array-obj:
+//       - name: obj
+//         value: field
+//
+// swagger:meta
