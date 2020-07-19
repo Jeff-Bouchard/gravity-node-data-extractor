@@ -3,13 +3,13 @@
 
 ## Abstract
 
-This document represents UML architecture of Gravity build-in data extractor. The author of document, architecture and implementation is **Gravity Core Team**. Current implementation is *first* and *initial* so it's considered as *built-in*.
+This document describes the UML architecture of the Gravity built-in data extractor. The architecture and implementation of extractors is developed by the **Gravity Core Team**. The implementation described in this document is the earliest initial version, so it is considered as *built-in*.
 
 ## Foreword
 
-Architecture provided in this document is served only as a ***best practise***  for Gravity protocol node operators and contributors. 
+The architecture provided in this document is offered as ***best practice*** guidance for Gravity protocol node operators and contributors. 
 
-Violating the idea and object relations can lead to unexpected behaviour of Gravity Node system parts.
+Violating the specification and object relations can lead to unexpected behaviour of some system parts of the Gravity Node.
 
 ## Scheme Overview
 
@@ -18,45 +18,43 @@ Violating the idea and object relations can lead to unexpected behaviour of Grav
 
 ## Main concepts
 
-The main concepts behind the subject implementation we stick to are:
-1. Provide stateless system & Avoid data mutability
-2. Conformance to ***any*** kind of data (reusability)
-3. Manifest available operations
+The main concepts behind the implementation of extractors are:
+1. Providing a stateless system & avoiding data mutability
+2. Conforming to ***any*** kind of data (reusability)
+3. Manifesting available operations
 
-### Stateless VS stateful
+### Stateless vs stateful
 
-Talking about modern system designing we tend to outlook for certain balance in how operate with objects.
+In designing modern systems, it is necessary to achieve a certain balance in how objects are manipulated.
 
-The vast majority of applications combine both stateless and stateful parts of the system.
+The vast majority of applications combine both stateless and stateful system parts.
 
-As regards *Gravity protocol*, it's not an exception. Such parts of the system that are responsible for data mutability and storing are considered stateful. 
+As regards to the *Gravity protocol*, it's not an exception. Such parts of the system that are responsible for data mutability and storage are considered stateful. 
 
-By design, extractors are aimed to perform only data aggregation and mapping procedures. That is why we have stateless approach. They are not awared of particular data consumers, and here comes the second advantage - *Extractors are isolated.*
-
+By design, extractors are aimed to only perform data aggregation and mapping procedures, which is the reason for also introducing a stateless approach. In addition, *extractors are isolated*, meaning that they are not "aware" of any particular data consumers.
+ 
 
 ### Conformance to any data & Reusability
 
-Current architecture gives an ability to ***transform*** and ***transport*** data ***the way we want***. There are responsible interfaces for that:
-1. Extractor<T, R> - This interface declares methods on how we ***transform*** data .
-2. IDataBridge<T, R> - This interface declares methods on how we ***transport*** the data.
+The current architecture gives an ability to ***transform*** and ***transport*** data in any way that is necessary for a particular use-case. There are two interfaces that implement this functionality:
+1. Extractor<T, R> - This interface declares methods on how the data is ***transformed***,
+2. IDataBridge<T, R> - This interface declares methods on how the data is ***transported***.
 
 Generic types provided in declarations represent:
-1. T - raw data type
+1. T - raw data type,
 2. R - transformed response data type. 
 
-Furthermore, such approach gives us an ability to represent any kind of data and deliver it differently.
+Furthermore, such approach gives us an ability to represent any kind of data and deliver it in different ways.
 
-The scheme represents possible implementations:
+The scheme below shows possible implementations:
 
 ![Gravity data extractor response controller examples](https://i.imgur.com/RnPi1Kw.png)
 
-Existing ***reusability of every distinct system part*** concludes to the ***reusability of whole system***.
+The ***reusability of every distinct system part*** translates into the ***reusability of the whole system***.
 
 ### Available operations
 
-The design requires 3 accessible access endpoints to be implemented. Those are for:
-1. Raw data fetching.
-2. Mapped/transformed data fetching.
-3. Extractor info in JSON format, containing data feed tag and description.
-
-
+The design requires three accessible endpoints to be implemented. These are needed for:
+1. Fetching raw data.
+2. Fetching mapped/transformed data.
+3. Fetching extractor info in JSON format, containing the data feed tag and description.
