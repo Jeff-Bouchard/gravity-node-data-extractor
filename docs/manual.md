@@ -11,61 +11,61 @@
  
 ## Introduction
 
-This manual provides steps that will help you to build your own extractor tied to specific endpoint. Our example shows the usage of Binance price extractor. The data bridge is HTTP.
+This manual provides steps that will help you to build your own extractor tied to a specific endpoint. The example described in this manual uses a Binance price extractor. The data bridge used is HTTP.
 
 ## Initialization
 
-Firstly, clone the repo and start building swagger meta data by calling:
+First, clone the repo and build Swagger meta data:
 
 >  bash ./bootstrap.sh
 
-After that, enter info about your extractor, it will be visible in Swagger UI spec.
+Enter info about your extractor. It will be visible in the Swagger UI spec.
 
 > Enter extractor host: explorer.gravityhub.org
 > Enter contact website: gravityhub.org
 > Enter contact email: oracles@gravityhub.org
 
-This command will add swagger metadata to your extractor.
+This command will add Swagger metadata to your extractor.
 
 ## First overview
 
-Here is the file directory. 
+The file directory is described below.
 
 ![Things to override](https://i.imgur.com/YnJuPpf.png)
 
-1. Controller - where data transition takes place
-2. Docs - a place for docs 
+1. Controller - implements data transition
+2. Docs - a directory for documentation 
 3. Model - model definitions, both internal and public
 4. Router - entities responsible for routing
 
 ---
 
-Let's take a look at main.go file. We are interested in ***init*** and ***main*** functions:
+Let us take a look at the main.go file, specifically at the ***init*** and ***main*** functions:
 
-Init function takes care of CLI parameters that can be crucial according to your extractor type.
+Init function takes care of CLI parameters that can be crucial depending on the type of extractor that you are implementing.
 
 ![Init fn](https://i.imgur.com/ZClHaOE.png)
 
 For example:
 
-1. Almost *any* price extractor *will mostly* handle pair name parameter from CLI, it's convenient, we can run multiple extractors for different price pairs, just by handling the params. (pair param)
-2. We can combine multiple extractors in one repo. It gives us an ability to choose implementation ***at runtime***, just by passing extractor type. (type param)
-3. It goes without saying, providing appropriate extractor tag is crucial. (tag param)
+1. Almost *any* price extractor *will* process the pair name parameter from the CLI. Multiple extractors can be run for different price pairs, just by handling the params. (pair param)
+2. Multiple extractors can be combined in one repo. It gives an ability to choose an implementation ***at runtime***, just by passing an extractor type. (type param)
+3. It is also necessary to provide an appropriate extractor tag. (tag param)
 
 
 ---
 
-Here we can see that main.go file creates concrete data transport controller instance (*ResponseController*).
+The main.go file creates a concrete data transport controller instance (*ResponseController*).
 
-Business logic of transported data is incapsulated in *ResponseController*.
+The business logic of transported data is incapsulated in the *ResponseController*.
 
 ![Main fn](https://i.imgur.com/yRaJPgg.png)
 
-"r" is router singleton, it provides reference to routes. In this example - for HTTP routes.
+"r" is a router singleton that provides reference orr routes, in this example for HTTP routes.
 
 ---
 
-We mentioned extractor switching ***at runtime*** just above. In order to achieve such a goal we need some kind of enumerator. [enum.go](models/enum.go)
+The extractor switching ***at runtime*** was mentioned above. In order to achieve such a goal, an enumerator is needed. [enum.go](models/enum.go)
 
 ![Extractor enumerator](https://i.imgur.com/Kl3BjS6.png)
 
@@ -75,26 +75,24 @@ Also, available extractor types must be declared internally. (*binance*, *metal*
 
 ## Things to override
 
-If your goal is to extend/mutate existing implementations, then follow the steps:
+If the goal is to extend/mutate existing implementations, follow these steps:
 
-1. Take a look at *models directory*
-2. Declare a new model or extend existing. You must implement all *IExtractor interface methods*  in order to declare a valid extractor.
+1. Go into the *models directory*
+2. Declare a new model or extend the existing one. You must implement all *IExtractor interface methods*  in order to declare a valid extractor.
 ![enter image description here](https://i.imgur.com/TD6FXmA.png)
 
-Don't forget to mark structs you want to expose by specifying swagger model declaration.
+Do not forget to mark structs you want to expose by specifying a Swagger model declaration.
 >// swagger:model
 
 You can find more details on goswagger [here]([https://goswagger.io/use/spec.html](https://goswagger.io/use/spec.html))
 
-4. Provide implementation with the name in *enum.go* *(in order to change in at runtime by need)*
-5. Open *ResponseController* declaration file
+4. Provide an implementation with the name in *enum.go*
+5. Open the *ResponseController* declaration file
 
 ![ResponseController internal extractor](https://i.imgur.com/oBJ5yc7.png)
 
-Here you can provide logic with handling specific initialization data.
+Here you can provide logic for handling specific initialization data.
 
 ### Extending the logic
 
-Feel free to extend the existing system by adding more layers of abstraction. 
-
-However, keep in mind that violating existing interface constraints mentioned in [scheme.md](docs/scheme.md) is considered as system *anti-pattern*.
+It is encouraged to extend the existing system by adding more layers of abstraction. However, it is necessary to keep in mind that violating the existing interface constraints mentioned in [scheme.md](docs/scheme.md) is considered as a system *anti-pattern*.
