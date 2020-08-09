@@ -23,6 +23,7 @@ type InternalAggregationRequestList struct {
 	Values []*InternalAggregationRequest
 }
 
+
 func MockupRequestList () *InternalAggregationRequestList {
 	return &InternalAggregationRequestList {
 		Values: []*InternalAggregationRequest {
@@ -50,6 +51,7 @@ func MockupRequestList () *InternalAggregationRequestList {
 	}
 }
 
+
 func MapMockupListToAmounts (values []*InternalAggregationRequest) []int64 {
 	result := make([]int64, len(values), len(values))
 
@@ -59,6 +61,8 @@ func MapMockupListToAmounts (values []*InternalAggregationRequest) []int64 {
 
 	return result
 }
+
+
 func MapMockupListAmountToInterfaceList(values []int64) []interface{} {
 	mappedAmountList := make([]interface{}, len(values), len(values))
 
