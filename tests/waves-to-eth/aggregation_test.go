@@ -5,7 +5,6 @@ import (
 
 	"bytes"
 	"encoding/json"
-	controller "github.com/Gravity-Tech/gravity-node-data-extractor/v2/controller"
 	_ "go/types"
 	"io/ioutil"
 	"net/http"
@@ -82,12 +81,12 @@ func TestExternalAggregatorResult(t *testing.T) {
 	mockupValues := MockupRequestList()
 	amountList := MapMockupListToAmounts(mockupValues.Values)
 	mappedAmountList := MapMockupListAmountToInterfaceList(amountList)
-
-	inputValues := controller.AggregationRequestBody{
-		Type:   "int64",
-		Values: mappedAmountList,
-	}
-	requestBody, _ := json.Marshal(&inputValues)
+	//
+	//inputValues := controller.AggregationRequestBody{
+	//	Type:   "int64",
+	//	Values: mappedAmountList,
+	//}
+	requestBody, _ := json.Marshal(&mappedAmountList)
 
 	resp, respErr := http.Post(aggregatorUrl, "application/json", bytes.NewBuffer(requestBody))
 
