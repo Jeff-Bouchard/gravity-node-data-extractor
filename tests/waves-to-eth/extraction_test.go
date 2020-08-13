@@ -2,6 +2,7 @@ package tests
 
 import (
 	waves "github.com/Gravity-Hub-Org/susy-data-extractor/v2/swagger-models/models"
+	"github.com/Gravity-Hub-Org/susy-data-extractor/v2/tests"
 	_ "go/types"
 	"testing"
 )
@@ -29,26 +30,6 @@ const (
 	MaxBlocksPerRequest = 99
 )
 
-type ExtractionReadyState struct {
-	ProcessedRequestIDList []string
-	BlockForRequest int64
-	BlockInterestRange []int64
-	ReceivingAddress, SenderAddress string
-
-	SwapCurrency string
-}
-
-func (state *ExtractionReadyState) HasBlockInterest (height int64) bool {
-	begin, end := state.BlockInterestRange[0], state.BlockInterestRange[1]
-
-	return height >= begin && height <= end
-}
-
-type SwapRequest struct {
-	Sender, Recipient string
-	Amount int64
-	Currency string
-}
 
 func mockupBlock() []*waves.Block {
 	heights := []int32 { 1, 2, 3 }
@@ -115,7 +96,7 @@ func mockupBlock() []*waves.Block {
 
 func TestExtractionFromWavesToEth(t *testing.T) {
 
-	swapDesiredState := &ExtractionReadyState{
+	swapDesiredState := &tests.ExtractionReadyState{
 		ProcessedRequestIDList: []string {},
 		BlockForRequest:        0,
 		BlockInterestRange:     []int64 { LastHeight - MaxBlocksPerRequest, LastHeight },
@@ -126,7 +107,7 @@ func TestExtractionFromWavesToEth(t *testing.T) {
 
 	// Abstract for swap request
 	// Абстракция над требованиями к свопу
-	swapRequest := &SwapRequest{
+	swapRequest := &tests.SwapRequest{
 		Sender:    swapDesiredState.SenderAddress,
 		Recipient: swapDesiredState.ReceivingAddress,
 		Amount:    SwapAmount,

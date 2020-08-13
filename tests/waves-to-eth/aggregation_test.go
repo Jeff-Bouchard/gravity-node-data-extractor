@@ -2,46 +2,34 @@ package tests
 
 import (
 	//waves "github.com/Gravity-Hub-Org/susy-data-extractor/v2/swagger-models/models"
-
 	"bytes"
 	"encoding/json"
+	"github.com/Gravity-Hub-Org/susy-data-extractor/v2/tests"
 	_ "go/types"
 	"io/ioutil"
 	"net/http"
 	"testing"
 )
 
-
-type InternalAggregationRequest struct {
-	RequestID string
-	Receiver string
-	Amount int64
-}
-
-type InternalAggregationRequestList struct {
-	Values []*InternalAggregationRequest
-}
-
-
-func MockupRequestList () *InternalAggregationRequestList {
-	return &InternalAggregationRequestList {
-		Values: []*InternalAggregationRequest {
-			&InternalAggregationRequest{
+func MockupRequestList () *tests.InternalAggregationRequestList {
+	return &tests.InternalAggregationRequestList {
+		Values: []*tests.InternalAggregationRequest {
+			&tests.InternalAggregationRequest{
 				RequestID: "A",
 				Receiver:  "John",
 				Amount:    1000,
 			},
-			&InternalAggregationRequest{
+			&tests.InternalAggregationRequest{
 				RequestID: "A",
 				Receiver:  "John",
 				Amount:    1500,
 			},
-			&InternalAggregationRequest{
+			&tests.InternalAggregationRequest{
 				RequestID: "A",
 				Receiver:  "John",
 				Amount:    1000,
 			},
-			&InternalAggregationRequest{
+			&tests.InternalAggregationRequest{
 				RequestID: "A",
 				Receiver:  "John",
 				Amount:    1000,
@@ -51,7 +39,7 @@ func MockupRequestList () *InternalAggregationRequestList {
 }
 
 
-func MapMockupListToAmounts (values []*InternalAggregationRequest) []int64 {
+func MapMockupListToAmounts (values []*tests.InternalAggregationRequest) []int64 {
 	result := make([]int64, len(values), len(values))
 
 	for _, value := range values {
@@ -81,11 +69,7 @@ func TestExternalAggregatorResult(t *testing.T) {
 	mockupValues := MockupRequestList()
 	amountList := MapMockupListToAmounts(mockupValues.Values)
 	mappedAmountList := MapMockupListAmountToInterfaceList(amountList)
-	//
-	//inputValues := controller.AggregationRequestBody{
-	//	Type:   "int64",
-	//	Values: mappedAmountList,
-	//}
+
 	requestBody, _ := json.Marshal(&mappedAmountList)
 
 	resp, respErr := http.Post(aggregatorUrl, "application/json", bytes.NewBuffer(requestBody))
