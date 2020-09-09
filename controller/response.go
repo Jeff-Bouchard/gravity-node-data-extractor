@@ -17,7 +17,7 @@ func (rc *ResponseController) extractorEnumerator() *m.ExtractorEnumerator {
 }
 
 func (rc *ResponseController) aggregator() m.Aggregator {
-	return &m.BinanceAggregator{}
+	return &m.CommonAggregator{}
 }
 
 func (rc *ResponseController) extractor() *m.ExtractorProvider {
@@ -26,7 +26,7 @@ func (rc *ResponseController) extractor() *m.ExtractorProvider {
 	var extractor m.IExtractor
 
 	switch rc.TagDelegate.ExtractorType {
-	case enumerator.Metal:
+	case enumerator.IB:
 		extractor = &m.MetalCurrencyMetalExtractor{
 			Tag:        rc.TagDelegate.Tag,
 			MetalIndex: "XAU",

@@ -22,19 +22,16 @@ type ExtractorInfo struct {
 
 type ExtractorEnumeration = string
 type ExtractorEnumerator struct {
-	Binance, Metal ExtractorEnumeration
+	IBPort_WAVES_ETH, LUPort_WAVES_ETH ExtractorEnumeration
 }
 
-var binanceExtractor = "binance"
-var metalExtractor = "metal"
-
 var DefaultExtractorEnumerator = &ExtractorEnumerator{
-	Binance: binanceExtractor,
-	Metal:   metalExtractor,
+	IBPort_WAVES_ETH: "IB_Port_WAVES_to_ETH",
+	LUPort_WAVES_ETH: "LU_Port_WAVES_to_ETH",
 }
 
 func (e *ExtractorEnumerator) Default() ExtractorEnumeration {
-	return binanceExtractor
+	return e.IBPort_WAVES_ETH
 }
 
 func (e *ExtractorEnumerator) TypeAvailable(enum ExtractorEnumeration) bool {
@@ -48,8 +45,8 @@ func (e *ExtractorEnumerator) TypeAvailable(enum ExtractorEnumeration) bool {
 
 func (e *ExtractorEnumerator) Available() []ExtractorEnumeration {
 	return []string {
-		binanceExtractor,
-		metalExtractor,
+		DefaultExtractorEnumerator.IBPort_WAVES_ETH,
+		DefaultExtractorEnumerator.LUPort_WAVES_ETH,
 	}
 }
 

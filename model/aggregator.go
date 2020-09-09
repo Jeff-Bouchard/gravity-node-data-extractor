@@ -7,14 +7,12 @@ import (
 
 type Aggregator interface {
 	AggregateInt([]interface{}) int64
-	AggregateFloat([]interface{}) float64
-	AggregateBytes([]interface{}) []byte
 	AggregateString([]interface{}) string
 }
 
-type BinanceAggregator struct {}
+type CommonAggregator struct {}
 
-func (aggregator *BinanceAggregator) AggregateInt (values []interface{}) int64 {
+func (aggregator *CommonAggregator) AggregateInt (values []interface{}) int64 {
 	var result int64
 
 	for _, value := range values {
@@ -24,7 +22,7 @@ func (aggregator *BinanceAggregator) AggregateInt (values []interface{}) int64 {
 	return result / int64(len(values))
 }
 
-func (aggregator *BinanceAggregator) AggregateFloat (values []interface{}) float64 {
+func (aggregator *CommonAggregator) AggregateFloat (values []interface{}) float64 {
 	var result float64
 
 	for _, value := range values {
@@ -34,11 +32,11 @@ func (aggregator *BinanceAggregator) AggregateFloat (values []interface{}) float
 	return result / float64(len(values))
 }
 
-func (aggregator *BinanceAggregator) AggregateBytes (values []interface{}) []byte {
+func (aggregator *CommonAggregator) AggregateBytes (values []interface{}) []byte {
 	return make([]byte, 0)
 }
 
-func (aggregator *BinanceAggregator) AggregateString (values []interface{}) string {
+func (aggregator *CommonAggregator) AggregateString (values []interface{}) string {
 	var result float64
 
 	for _, value := range values {
