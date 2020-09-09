@@ -2,3 +2,5 @@
 
 .idea/
 gravity-node-data-extractor
+
+.env

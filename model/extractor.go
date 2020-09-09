@@ -10,8 +10,8 @@ type IExtractor interface {
 	// first arg should represent type model, second one primitive
 	Data() (interface{}, interface{})
 	Info() *ExtractorInfo
-	extractData(params interface{}) []RawData
-	mapData(extractedData []RawData) interface{}
+	// extractData(params interface{}) []RawData
+	// mapData(extractedData []RawData) interface{}
 }
 
 // swagger:model
@@ -48,6 +48,17 @@ func (e *ExtractorEnumerator) Available() []ExtractorEnumeration {
 		DefaultExtractorEnumerator.IBPort_WAVES_ETH,
 		DefaultExtractorEnumerator.LUPort_WAVES_ETH,
 	}
+}
+
+func (e *ExtractorEnumerator) MatchArgumentEnumeration (enumeration ExtractorEnumeration) ExtractorEnumeration {
+	switch enumeration {
+	case "ib-waves-eth":
+		return DefaultExtractorEnumerator.IBPort_WAVES_ETH
+	case "lu-waves-eth":
+		return DefaultExtractorEnumerator.LUPort_WAVES_ETH
+	}
+
+	return ""
 }
 
 type ExtractorProvider struct {

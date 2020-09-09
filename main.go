@@ -49,6 +49,8 @@ import (
 	r "github.com/Gravity-Tech/gravity-node-data-extractor/v2/router"
 	"net/http"
 )
+
+
 var port, extractorTag, symbolPair, apiKey, extractorType string
 
 func headers(w http.ResponseWriter, req *http.Request) {
@@ -70,6 +72,9 @@ func init() {
 }
 
 func main () {
+
+
+	
 	tagController := &c.ParamsController{ Tag: extractorTag, SymbolPair: symbolPair, ApiKey: apiKey, ExtractorType: extractorType }
 	respController := &c.ResponseController{ TagDelegate: tagController }
 

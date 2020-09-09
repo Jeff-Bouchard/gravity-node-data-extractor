@@ -6,6 +6,8 @@ import (
 	"net/http"
 
 	m "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
+	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/ibport"
+	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/luport"
 )
 
 type ResponseController struct {
@@ -25,16 +27,11 @@ func (rc *ResponseController) extractor() *m.ExtractorProvider {
 
 	var extractor m.IExtractor
 
-	switch rc.TagDelegate.ExtractorType {
-	case enumerator.IB:
-		extractor = &m.MetalCurrencyMetalExtractor{
-			Tag:        rc.TagDelegate.Tag,
-			MetalIndex: "XAU",
-		}
-	case enumerator.Binance:
-		fallthrough
-	default:
-		extractor = &m.BinancePriceExtractor{Tag: rc.TagDelegate.Tag, SymbolPair: rc.TagDelegate.SymbolPair, ApiKey: rc.TagDelegate.ApiKey}
+	switch enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType) {
+	case enumerator.IBPort_WAVES_ETH:
+		extractor = &ibport.IBPortWavesToEthereumExtractor{}
+	case enumerator.LUPort_WAVES_ETH:
+		extractor = &luport.LUPortWavesToEthereumExtractor{}
 	}
 
 	return &m.ExtractorProvider{Current: extractor}
