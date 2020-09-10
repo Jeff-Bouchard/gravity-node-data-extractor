@@ -2,8 +2,10 @@ package model
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
+	godotenv "github.com/joho/godotenv"
 	"os"
+	//"strings"
+	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/utils"
 	// "strings"
 )
 
@@ -46,12 +48,14 @@ type ConfigBuilder struct {
 }
 
 func (c *ConfigBuilder) GenerateFromEnvironment () *Config {
-	// extractorType := c.ExtractorType
-	//
-	// if !strings.Contains(extractorType, availableExtractorPortTypes) {
-	// 	fmt.Errorf("Extractor port type is unavailable: %v \n", extractorType)
-	// 	panic(1)
-	// }
+	extractorType := c.ExtractorType
+
+
+
+	if !utils.ContainsString(availableExtractorPortTypes, extractorType) {
+		fmt.Errorf("Extractor port type is unavailable: %v \n", extractorType)
+		panic(1)
+	}
 
 	envLoadErr := godotenv.Load(".env")
 

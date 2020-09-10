@@ -1,12 +1,20 @@
 package ibport
 
 import (
+	"bytes"
+	hexutil "encoding/hex"
+	"github.com/mr-tron/base58"
 	"strings"
 	// "github.com/ethereum/go-ethereum/common/hexutil"
 	model "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
 	fetch "github.com/Gravity-Tech/gravity-node-data-extractor/v2/controller/fetch"
 	waves "github.com/Gravity-Tech/gravity-node-data-extractor/v2/swagger-types/models"
+
+	wavesplatform "github.com/wavesplatform/go-lib-crypto"
+
 )
+
+type TransferRequestID [32]byte
 
 type IBPortWavesToEthereumExtractor struct {
 	Config *model.Config
@@ -20,6 +28,25 @@ func (extractor *IBPortWavesToEthereumExtractor) Description() string {
 	return "This extractor represents IBPort for source chain: WAVES and destination chain: ETH"
 }
 
+type transferRequest struct {
+	Amount, RequestID, Receiver string
+}
+func (request *transferRequest) Bytes() (error, []byte) {
+
+	var result []byte
+
+	byteRqId, err := base58.Decode(request.RequestID)
+	if err != nil { return err, nil }
+	byteReceiver, err := hexutil.DecodeString(request.Receiver)
+	if err != nil { return err, nil }
+
+	result = append(result, byteRqId...)
+	result = append(result, byteReceiver...)
+
+	return nil, result
+}
+
+
 
 func resolveEntry(entries []*waves.DataEntry, key string) *waves.DataEntry {
 	for _, entry := range entries {
@@ -30,39 +57,86 @@ func resolveEntry(entries []*waves.DataEntry, key string) *waves.DataEntry {
 
 	return nil
 }
-func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{}) {
+func filterEntries(entries []*waves.DataEntry, callback func (*waves.DataEntry) bool) []*waves.DataEntry {
+	result := make([]*waves.DataEntry, len(entries))
 
+	for _, entry := range entries {
+		if callback(entry) {
+			result = append(result, entry)
+		}
+	}
+
+	return result
+}
+
+//func IterateEntries(entries []*waves.DataEntry, firstKey string, onNext func(entry *waves.DataEntry)) {
+//	// Take first
+//	firstEntry := resolveEntry(entries, firstKey)
+//	currentRqIdEntry := firstEntry
+//
+//
+//	for {
+//		if currentRqIdEntry == nil { break }
+//
+//		onNext(currentRqIdEntry)
+//
+//		currentRqIdEntry = resolveEntry(entries, "next_rq_" + currentRqIdEntry.Value.(string))
+//	}
+//}
+
+func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{}) {
 	// First iteration
 	// Read waves state
 	client := extractor.wavesClient()
-	addressDataCollection, err := client.FetchAddressData(extractor.Config.SourceSCAddress)
+	addressData, err := client.FetchAddressData(extractor.Config.SourceSCAddress)
 
 	if err != nil {
 		return nil, nil
 	}
 
-	// type wavesTransferRequest struct {
-	// 	Amount uint64
-	// 	Receiver, RequestId string
-	// }
-
-	transferRequestID := resolveEntry(addressDataCollection, "first")
-	transferAmount := resolveEntry(addressDataCollection, "rq_amount_" + transferRequestID.Value.(string))
-	requestReceiver := resolveEntry(addressDataCollection, "rq_receiver_" + transferRequestID.Value.(string))
-
-	// m{base58ToBytes(rqId)}{toBytes32(amount)}{HextoBytes20(reciver)}
-
-	resultString := strings.Join(
-		[]string {
-			"m",
-			base58ToBytes(transferRequestID.Value.(string)),
-			toBytes32(transferAmount.Value.(string)),
-			hexToBytes(requestReceiver.Value.(string)),
-		},
-		"",
+	const (
+		TransferStatusNew = 1
+		TransferStatusCompleted = 2
 	)
 
-	return resultString, resultString
+
+	resultAn := make([]TransferRequestID, len(addressData))
+	resultBn := make([]TransferRequestID, len(addressData))
+
+	//
+	// aN computing
+	//
+	// Taking only new entries - waiting for processing
+	newStatusEntries := filterEntries(addressData, func(entry *waves.DataEntry) bool {
+		return strings.Contains(*entry.Key, "rq_status_") && entry.Value.(int) == TransferStatusNew
+	})
+
+	//
+	// Forming transferRequests + mapping to string
+	//
+	for _, entry := range newStatusEntries {
+		entryRqId := strings.Split(*entry.Key, "_")[2]
+
+		amount := resolveEntry(addressData, "rq_amount_" + entryRqId).Value.(string)
+		receiver := resolveEntry(addressData, "rq_receiver" + entryRqId).Value.(string)
+		resultRequest := &transferRequest{
+			Amount:    amount,
+			RequestID: entryRqId,
+			Receiver:  receiver,
+		}
+
+		resultString := resultRequest.Bytes()
+
+		resultAn = append(resultAn, resultString)
+	}
+
+	//
+	// bN computing
+	//
+
+	finalResult := append(resultAn, resultBn...)
+
+	return finalResult, finalResult
 }
 
 func base58ToBytes(rqId string) string {
@@ -91,19 +165,11 @@ func (extractor *IBPortWavesToEthereumExtractor) wavesClient() *fetch.WavesState
 	return &fetch.WavesStateFetcher{}
 }
 
-// func (extractor *IBPortWavesToEthereumExtractor) extractData(params interface{}) []model.RawData {
-// 	return make([]model.RawData, 0)
-// }
-
-// func (extractor *IBPortWavesToEthereumExtractor) mapData(extractedData []model.RawData) interface{} {
-// 	return nil
-// }
-
 type IBPortWavesToEthereumAggregator struct {
 	model.CommonAggregator
 }
 
-func (fetcher *IBPortWavesToEthereumAggregator) sort(ls []string) []string {
+func (aggregator *IBPortWavesToEthereumAggregator) sort(ls []string) []string {
 	sorted := true
     for index, value := range ls {
         
@@ -117,12 +183,12 @@ func (fetcher *IBPortWavesToEthereumAggregator) sort(ls []string) []string {
         }
     }
     
-    if !sorted { return fetcher.sort(ls) }
+    if !sorted { return aggregator.sort(ls) }
     
     return ls
 }
 
-func (fetcher *IBPortWavesToEthereumAggregator) hasDuplicates(ls []string) bool {
+func (aggregator *IBPortWavesToEthereumAggregator) hasDuplicates(ls []string) bool {
 	hashMap := make(map[int]string, len(ls))
 
 	for index, value := range ls {
@@ -137,10 +203,10 @@ func (fetcher *IBPortWavesToEthereumAggregator) hasDuplicates(ls []string) bool 
 }
 
 
-func (fetcher *IBPortWavesToEthereumAggregator) AggregateString(ls []string) string {
+func (aggregator *IBPortWavesToEthereumAggregator) AggregateString(ls []string) string {
 	// var result string
 
-	sorted := fetcher.sort(ls)
+	sorted := aggregator.sort(ls)
 
 	return strings.Join(sorted, "_")
 }

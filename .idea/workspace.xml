@@ -20,35 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab8d4744-36e8-416a-b420-6323376de1df" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/model/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/helper.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/config.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/fetch/waves.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/fetch/waves.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/params.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/response.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gravity-node-data-extractor" beforeDir="false" afterPath="$PROJECT_DIR$/gravity-node-data-extractor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/ibport/waves_to_eth.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/ibport/waves_to_eth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/luport/waves_to_eth.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/luport/waves_to_eth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/api_error.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/api_error.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/asset_details.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/asset_details.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/asset_distribution.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/asset_distribution.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/balance.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/balance.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/block.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/block_header.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/block_header.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/compiled_script.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/compiled_script.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/data_entry.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/data_entry.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/hashed_message.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/hashed_message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/reward_status.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/reward_status.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/script_meta.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/script_meta.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/signed.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/signed.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/state_changes.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/state_changes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/transaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/transaction.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/transaction_merkle_proofs.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/transaction_merkle_proofs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/swagger-types/models/transaction_status.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/transaction_status.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/typegen.sh" beforeDir="false" afterPath="$PROJECT_DIR$/typegen.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +68,7 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="watcher.settings" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -129,19 +106,23 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="389" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1596716308734" />
-    <state x="295" y="103" key="SettingsEditor" timestamp="1597396787762">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="364" y="-1144" key="SettingsEditor" timestamp="1599753165963">
+      <screen x="-596" y="-1440" width="2560" height="1440" />
     </state>
+    <state x="364" y="-1144" key="SettingsEditor/0.0.1440.900/-596.-1440.2560.1440@-596.-1440.2560.1440" timestamp="1599753165963" />
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1596715323859" />
     <state x="295" y="103" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1597396787762" />
-    <state x="379" y="207" width="699" height="486" key="find.popup" timestamp="1596800115632">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="364" y="-1144" key="SettingsEditor/0.25.1440.824/-596.-1440.2560.1440@-596.-1440.2560.1440" timestamp="1599753053281" />
+    <state x="78" y="-1109" width="1243" height="778" key="find.popup" timestamp="1599753526800">
+      <screen x="-596" y="-1440" width="2560" height="1440" />
     </state>
+    <state x="78" y="-1109" width="1243" height="778" key="find.popup/0.0.1440.900/-596.-1440.2560.1440@-596.-1440.2560.1440" timestamp="1599753526800" />
     <state x="379" y="207" width="699" height="486" key="find.popup/0.0.1440.900/-596.-1440.2560.1440@0.0.1440.900" timestamp="1596800115632" />
     <state x="379" y="207" width="681" height="486" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1594204251443" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1594204120636">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="88" y="-1126" width="1192" height="1082" key="search.everywhere.popup" timestamp="1599757116135">
+      <screen x="-596" y="-1440" width="2560" height="1440" />
     </state>
+    <state x="88" y="-1126" width="1192" height="1082" key="search.everywhere.popup/0.0.1440.900/-596.-1440.2560.1440@-596.-1440.2560.1440" timestamp="1599757116135" />
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1594204120636" />
     <state x="450" y="364" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1598867107988">
       <screen x="0" y="23" width="1440" height="832" />
