@@ -31,19 +31,18 @@ func (extractor *IBPortWavesToEthereumExtractor) Description() string {
 type transferRequest struct {
 	Amount, RequestID, Receiver string
 }
-func (request *transferRequest) Bytes() (error, []byte) {
-
+func (request *transferRequest) Bytes() ([]byte, error) {
 	var result []byte
 
 	byteRqId, err := base58.Decode(request.RequestID)
-	if err != nil { return err, nil }
+	if err != nil { return nil, err }
 	byteReceiver, err := hexutil.DecodeString(request.Receiver)
-	if err != nil { return err, nil }
+	if err != nil { return nil, err }
 
 	result = append(result, byteRqId...)
 	result = append(result, byteReceiver...)
 
-	return nil, result
+	return result, nil
 }
 
 
@@ -99,9 +98,8 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 		TransferStatusCompleted = 2
 	)
 
-
-	resultAn := make([]TransferRequestID, len(addressData))
-	resultBn := make([]TransferRequestID, len(addressData))
+	resultAn := make([]byte, len(addressData))
+	resultBn := make([]byte, len(addressData))
 
 	//
 	// aN computing
@@ -125,13 +123,14 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 			Receiver:  receiver,
 		}
 
-		resultString := resultRequest.Bytes()
+		// EXPLICIT ERROR IGNORE
+		resultString, _ := resultRequest.Bytes()
 
-		resultAn = append(resultAn, resultString)
+		resultAn = append(resultAn, resultString...)
 	}
 
 	//
-	// bN computing
+	// bN computing - ?
 	//
 
 	finalResult := append(resultAn, resultBn...)
