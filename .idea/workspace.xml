@@ -20,10 +20,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab8d4744-36e8-416a-b420-6323376de1df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/watcherTasks.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/fetch/waves.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/fetch/waves.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/params.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/response.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gravity-node-data-extractor" beforeDir="false" afterPath="$PROJECT_DIR$/gravity-node-data-extractor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/ibport/waves_to_eth.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/ibport/waves_to_eth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/luport/waves_to_eth.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/luport/waves_to_eth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/api_error.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/api_error.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/asset_details.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/asset_details.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/asset_distribution.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/asset_distribution.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/balance.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/balance.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/block.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/block_header.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/block_header.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/compiled_script.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/compiled_script.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/data_entry.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/data_entry.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/hashed_message.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/hashed_message.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/reward_status.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/reward_status.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/script_meta.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/script_meta.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/signed.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/signed.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/state_changes.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/state_changes.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/transaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/transaction.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/transaction_merkle_proofs.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/transaction_merkle_proofs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/swagger-types/models/transaction_status.go" beforeDir="false" afterPath="$PROJECT_DIR$/swagger-types/models/transaction_status.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/typegen.sh" beforeDir="false" afterPath="$PROJECT_DIR$/typegen.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +62,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:\Go" />
+  <component name="GOROOT" path="$PROJECT_DIR$/../../../go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -91,9 +116,10 @@
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state x="752" y="447" key="#GOROOT" timestamp="1597396747885">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="564" y="253" key="#GOROOT" timestamp="1599735887278">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="564" y="253" key="#GOROOT/0.0.1440.900@0.0.1440.900" timestamp="1599735887278" />
     <state x="752" y="447" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1597396747885" />
     <state x="320" y="115" key="#Go_Modules_(vgo)" timestamp="1596800272236">
       <screen x="0" y="0" width="1440" height="900" />

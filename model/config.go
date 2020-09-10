@@ -1,10 +1,24 @@
-package controller
+package model
 
 import (
-	"os"
 	"fmt"
 	"github.com/joho/godotenv"
+	"os"
+	// "strings"
 )
+
+type ExtractorType string
+
+const (
+	IBPortWavesEth = "ibport-waves-eth"
+	LUPortWavesEth = "luport-waves-eth"
+	IBPortEthWaves = "ibport-eth-waves"
+	LUPortEthWaves = "luport-eth-waves"
+)
+
+var availableExtractorPortTypes = []string {
+	IBPortWavesEth, LUPortWavesEth, IBPortEthWaves, LUPortEthWaves,
+}
 
 type Config struct {
 	SourceSCAddress string
@@ -27,9 +41,18 @@ func (config *Config) Validate () error {
 	return nil
 }
 
-type ConfigBuilder struct {}
+type ConfigBuilder struct {
+	ExtractorType string
+}
 
 func (c *ConfigBuilder) GenerateFromEnvironment () *Config {
+	// extractorType := c.ExtractorType
+	//
+	// if !strings.Contains(extractorType, availableExtractorPortTypes) {
+	// 	fmt.Errorf("Extractor port type is unavailable: %v \n", extractorType)
+	// 	panic(1)
+	// }
+
 	envLoadErr := godotenv.Load(".env")
 
 	if envLoadErr != nil {

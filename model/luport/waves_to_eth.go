@@ -6,7 +6,9 @@ import (
 )
 
 
-type LUPortWavesToEthereumExtractor struct {}
+type LUPortWavesToEthereumExtractor struct {
+	Config *model.Config
+}
 
 func (extractor *LUPortWavesToEthereumExtractor) DataFeedTag() string {
 	return "LUPort_extractor_WAVES_source_ETH_destination"

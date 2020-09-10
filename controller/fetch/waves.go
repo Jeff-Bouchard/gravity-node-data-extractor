@@ -15,11 +15,11 @@ func (fetcher *WavesStateFetcher) fetch(path string) (*http.Response, error) {
 	return http.Get(nodeUrl + path)
 }
 
-func (fetcher *WavesStateFetcher) FetchAddressData(address string) (Error, []*waves.DataEntry) {
-	response, err := fetcher.fetch(fmt.Sprintf("/addresses/data/%v", block))
+func (fetcher *WavesStateFetcher) FetchAddressData(address string) ([]*waves.DataEntry, error) {
+	response, err := fetcher.fetch(fmt.Sprintf("/addresses/data/%v", address))
 
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
 	var result []*waves.DataEntry
@@ -29,8 +29,8 @@ func (fetcher *WavesStateFetcher) FetchAddressData(address string) (Error, []*wa
 	decodeErr := json.NewDecoder(response.Body).Decode(&result)
 
 	if decodeErr != nil { 
-		return decodeErr, nil
+		return nil, decodeErr
 	}
 
-	return nil, &result
+	return result, nil
 }

@@ -2,23 +2,15 @@ package ibport
 
 import (
 	"strings"
+	// "github.com/ethereum/go-ethereum/common/hexutil"
 	model "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
+	fetch "github.com/Gravity-Tech/gravity-node-data-extractor/v2/controller/fetch"
+	waves "github.com/Gravity-Tech/gravity-node-data-extractor/v2/swagger-types/models"
 )
 
-
-// func fetchState
-
-
-// type IExtractor interface {
-// 	DataFeedTag() string
-// 	Description() string
-// 	Data() (interface{}, interface{})
-// 	Info() *ExtractorInfo
-// 	extractData(params interface{}) []RawData
-// 	mapData(extractedData []RawData) interface{}
-// }
-
-type IBPortWavesToEthereumExtractor struct {}
+type IBPortWavesToEthereumExtractor struct {
+	Config *model.Config
+}
 
 func (extractor *IBPortWavesToEthereumExtractor) DataFeedTag() string {
 	return "IBPort_extractor_WAVES_source_ETH_destination"
@@ -28,9 +20,61 @@ func (extractor *IBPortWavesToEthereumExtractor) Description() string {
 	return "This extractor represents IBPort for source chain: WAVES and destination chain: ETH"
 }
 
-func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{}) {
-	return nil, nil
+
+func resolveEntry(entries []*waves.DataEntry, key string) *waves.DataEntry {
+	for _, entry := range entries {
+		if *entry.Key == key {
+			return entry
+		}
+	}
+
+	return nil
 }
+func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{}) {
+
+	// First iteration
+	// Read waves state
+	client := extractor.wavesClient()
+	addressDataCollection, err := client.FetchAddressData(extractor.Config.SourceSCAddress)
+
+	if err != nil {
+		return nil, nil
+	}
+
+	// type wavesTransferRequest struct {
+	// 	Amount uint64
+	// 	Receiver, RequestId string
+	// }
+
+	transferRequestID := resolveEntry(addressDataCollection, "first")
+	transferAmount := resolveEntry(addressDataCollection, "rq_amount_" + transferRequestID.Value.(string))
+	requestReceiver := resolveEntry(addressDataCollection, "rq_receiver_" + transferRequestID.Value.(string))
+
+	// m{base58ToBytes(rqId)}{toBytes32(amount)}{HextoBytes20(reciver)}
+
+	resultString := strings.Join(
+		[]string {
+			"m",
+			base58ToBytes(transferRequestID.Value.(string)),
+			toBytes32(transferAmount.Value.(string)),
+			hexToBytes(requestReceiver.Value.(string)),
+		},
+		"",
+	)
+
+	return resultString, resultString
+}
+
+func base58ToBytes(rqId string) string {
+	return ""
+}
+func toBytes32(amount string) string {
+	return ""
+}
+func hexToBytes(receiver string) string {
+	return ""
+}
+
 
 func (extractor *IBPortWavesToEthereumExtractor) Info() *model.ExtractorInfo {
 	return &model.ExtractorInfo{
@@ -39,13 +83,21 @@ func (extractor *IBPortWavesToEthereumExtractor) Info() *model.ExtractorInfo {
 	}
 }
 
-func (extractor *IBPortWavesToEthereumExtractor) extractData(params interface{}) []model.RawData {
-	return make([]model.RawData, 0)
-}
-
-func (extractor *IBPortWavesToEthereumExtractor) mapData(extractedData []model.RawData) interface{} {
+func (extractor *IBPortWavesToEthereumExtractor) ethereumClient() interface{} {
 	return nil
 }
+
+func (extractor *IBPortWavesToEthereumExtractor) wavesClient() *fetch.WavesStateFetcher {
+	return &fetch.WavesStateFetcher{}
+}
+
+// func (extractor *IBPortWavesToEthereumExtractor) extractData(params interface{}) []model.RawData {
+// 	return make([]model.RawData, 0)
+// }
+
+// func (extractor *IBPortWavesToEthereumExtractor) mapData(extractedData []model.RawData) interface{} {
+// 	return nil
+// }
 
 type IBPortWavesToEthereumAggregator struct {
 	model.CommonAggregator

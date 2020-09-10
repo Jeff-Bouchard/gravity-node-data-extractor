@@ -12,6 +12,7 @@ import (
 
 type ResponseController struct {
 	TagDelegate *ParamsController
+	Config *m.Config
 }
 
 func (rc *ResponseController) extractorEnumerator() *m.ExtractorEnumerator {
@@ -29,9 +30,9 @@ func (rc *ResponseController) extractor() *m.ExtractorProvider {
 
 	switch enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType) {
 	case enumerator.IBPort_WAVES_ETH:
-		extractor = &ibport.IBPortWavesToEthereumExtractor{}
+		extractor = &ibport.IBPortWavesToEthereumExtractor{ Config: rc.Config }
 	case enumerator.LUPort_WAVES_ETH:
-		extractor = &luport.LUPortWavesToEthereumExtractor{}
+		extractor = &luport.LUPortWavesToEthereumExtractor{ Config: rc.Config }
 	}
 
 	return &m.ExtractorProvider{Current: extractor}

@@ -45,6 +45,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	model "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
 	c "github.com/Gravity-Tech/gravity-node-data-extractor/v2/controller"
 	r "github.com/Gravity-Tech/gravity-node-data-extractor/v2/router"
 	"net/http"
@@ -64,19 +65,22 @@ func headers(w http.ResponseWriter, req *http.Request) {
 func init() {
 	flag.StringVar(&port, "port", "8090", "Port to run on")
 	flag.StringVar(&extractorTag, "tag", "latest", "Extractor version tag")
-	flag.StringVar(&symbolPair, "pair", "WAVESBTC", "Pair symbol appropriate to Binance API")
-	flag.StringVar(&apiKey, "api", "NONE", "Binance API Key")
 	flag.StringVar(&extractorType, "type", "binance", "Extractor Type")
 
 	flag.Parse()
 }
 
 func main () {
-
-
+	configBuiler := &model.ConfigBuilder{ ExtractorType: extractorType }
+	extractorConfig := configBuiler.GenerateFromEnvironment()
 	
-	tagController := &c.ParamsController{ Tag: extractorTag, SymbolPair: symbolPair, ApiKey: apiKey, ExtractorType: extractorType }
-	respController := &c.ResponseController{ TagDelegate: tagController }
+	validationErr := extractorConfig.Validate()
+	if validationErr != nil {
+		panic(1)
+	}
+
+	tagController := &c.ParamsController{ Tag: extractorTag, ExtractorType: extractorType }
+	respController := &c.ResponseController{ TagDelegate: tagController, Config: extractorConfig }
 
 	http.HandleFunc(r.GetExtractedData, respController.GetExtractedData)
 	http.HandleFunc(r.GetExtractorInfo, respController.GetExtractorInfo)
