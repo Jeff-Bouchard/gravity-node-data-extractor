@@ -22,6 +22,7 @@
     <list default="true" id="ab8d4744-36e8-416a-b420-6323376de1df" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/ibport/waves_to_eth.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/ibport/waves_to_eth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/helper.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

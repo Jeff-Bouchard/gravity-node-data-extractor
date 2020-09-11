@@ -1,7 +1,7 @@
 package ibport
 
 import (
-	"bytes"
+	//"bytes"
 	hexutil "encoding/hex"
 	"github.com/mr-tron/base58"
 	"strings"
@@ -10,8 +10,19 @@ import (
 	fetch "github.com/Gravity-Tech/gravity-node-data-extractor/v2/controller/fetch"
 	waves "github.com/Gravity-Tech/gravity-node-data-extractor/v2/swagger-types/models"
 
-	wavesplatform "github.com/wavesplatform/go-lib-crypto"
+	//wavesplatform "github.com/wavesplatform/go-lib-crypto"
 
+	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/utils"
+
+)
+
+
+const (
+	TransferStatusNew = 1
+	TransferStatusCompleted = 2
+
+	// seems like Ethereum only const!
+	TransferStatusSuccess = 3
 )
 
 type TransferRequestID [32]byte
@@ -31,16 +42,41 @@ func (extractor *IBPortWavesToEthereumExtractor) Description() string {
 type transferRequest struct {
 	Amount, RequestID, Receiver string
 }
-func (request *transferRequest) Bytes() ([]byte, error) {
+
+
+func (request *transferRequest) BytesForWAVES() ([]byte, error) {
 	var result []byte
+
+	byteBeginning := []byte("m")
 
 	byteRqId, err := base58.Decode(request.RequestID)
 	if err != nil { return nil, err }
+
+	byteAmount := []byte(request.Amount)
+
 	byteReceiver, err := hexutil.DecodeString(request.Receiver)
 	if err != nil { return nil, err }
 
+	result = append(result, byteBeginning...)
 	result = append(result, byteRqId...)
+	result = append(result, byteAmount...)
 	result = append(result, byteReceiver...)
+
+	return result, nil
+}
+
+func (request *transferRequest) BytesForETH() ([]byte, error) {
+	var result []byte
+
+	byteBeginning := []byte("c")
+
+	byteRqId := []byte(request.RequestID)
+
+	byteResultStatus := []byte(string(TransferStatusSuccess))
+
+	result = append(result, byteBeginning...)
+	result = append(result, byteRqId...)
+	result = append(result, byteResultStatus...)
 
 	return result, nil
 }
@@ -68,20 +104,20 @@ func filterEntries(entries []*waves.DataEntry, callback func (*waves.DataEntry) 
 	return result
 }
 
-//func IterateEntries(entries []*waves.DataEntry, firstKey string, onNext func(entry *waves.DataEntry)) {
-//	// Take first
-//	firstEntry := resolveEntry(entries, firstKey)
-//	currentRqIdEntry := firstEntry
-//
-//
-//	for {
-//		if currentRqIdEntry == nil { break }
-//
-//		onNext(currentRqIdEntry)
-//
-//		currentRqIdEntry = resolveEntry(entries, "next_rq_" + currentRqIdEntry.Value.(string))
-//	}
-//}
+func IterateEntries(entries []*waves.DataEntry, firstKey string, onNext func(entry *waves.DataEntry)) {
+	// Take first
+	firstEntry := resolveEntry(entries, firstKey)
+	currentRqIdEntry := firstEntry
+
+
+	for {
+		if currentRqIdEntry == nil { break }
+
+		onNext(currentRqIdEntry)
+
+		currentRqIdEntry = resolveEntry(entries, "next_rq_" + currentRqIdEntry.Value.(string))
+	}
+}
 
 func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{}) {
 	// First iteration
@@ -93,16 +129,12 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 		return nil, nil
 	}
 
-	const (
-		TransferStatusNew = 1
-		TransferStatusCompleted = 2
-	)
 
 	resultAn := make([]byte, len(addressData))
 	resultBn := make([]byte, len(addressData))
 
 	//
-	// aN computing
+	// aN: Computing
 	//
 	// Taking only new entries - waiting for processing
 	newStatusEntries := filterEntries(addressData, func(entry *waves.DataEntry) bool {
@@ -110,7 +142,7 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 	})
 
 	//
-	// Forming transferRequests + mapping to string
+	// aN: Forming transferRequests + mapping to string
 	//
 	for _, entry := range newStatusEntries {
 		entryRqId := strings.Split(*entry.Key, "_")[2]
@@ -124,14 +156,39 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 		}
 
 		// EXPLICIT ERROR IGNORE
-		resultString, _ := resultRequest.Bytes()
+		resultString, _ := resultRequest.BytesForWAVES()
 
 		resultAn = append(resultAn, resultString...)
 	}
 
 	//
-	// bN computing - ?
+	// bN: Computing - ?
 	//
+
+	//
+	// bN: Forming transferRequests + mapping to string
+	//
+	// WAVES ENTRIES ARE JUST FOR EXAMPLE
+	for _, entry := range newStatusEntries {
+		entryRqId := strings.Split(*entry.Key, "_")[2]
+
+		amount := resolveEntry(addressData, "rq_amount_" + entryRqId).Value.(string)
+		receiver := resolveEntry(addressData, "rq_receiver" + entryRqId).Value.(string)
+		status := resolveEntry(addressData, "rq_status" + entryRqId).Value.(string)
+
+		resultRequest := &transferRequest{
+			Amount:    amount,
+			RequestID: entryRqId,
+			Receiver:  receiver,
+		}
+
+		if status == string(TransferStatusCompleted) {
+			// EXPLICIT ERROR IGNORE
+			resultString, _ := resultRequest.BytesForETH()
+
+			resultBn = append(resultBn, resultString...)
+		}
+	}
 
 	finalResult := append(resultAn, resultBn...)
 
