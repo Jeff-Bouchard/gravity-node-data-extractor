@@ -3,6 +3,8 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/aggregators"
+	extractor "github.com/Gravity-Tech/gravity-node-data-extractor/v2/extractors"
 	"net/http"
 
 	m "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
@@ -15,27 +17,27 @@ type ResponseController struct {
 	Config *m.Config
 }
 
-func (rc *ResponseController) extractorEnumerator() *m.ExtractorEnumerator {
-	return m.DefaultExtractorEnumerator
+func (rc *ResponseController) extractorEnumerator() *extractor.ExtractorEnumerator {
+	return extractor.DefaultExtractorEnumerator
 }
 
-func (rc *ResponseController) aggregator() m.Aggregator {
-	return &m.CommonAggregator{}
+func (rc *ResponseController) aggregator() aggregators.Aggregator {
+	return &aggregators.CommonAggregator{}
 }
 
-func (rc *ResponseController) extractor() *m.ExtractorProvider {
+func (rc *ResponseController) extractor() *extractor.Provider {
 	enumerator := rc.extractorEnumerator()
 
-	var extractor m.IExtractor
+	var impl extractor.IExtractor
 
 	switch enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType) {
-	case enumerator.IBPort_WAVES_ETH:
-		extractor = &ibport.IBPortWavesToEthereumExtractor{ Config: rc.Config }
-	case enumerator.LUPort_WAVES_ETH:
-		extractor = &luport.LUPortWavesToEthereumExtractor{ Config: rc.Config }
+	case enumerator.IbportWavesEth:
+		impl = &ibport.IBPortWavesToEthereumExtractor{ Config: rc.Config }
+	case enumerator.LuportWavesEth:
+		impl = &luport.LUPortWavesToEthereumExtractor{ Config: rc.Config }
 	}
 
-	return &m.ExtractorProvider{Current: extractor}
+	return &extractor.Provider{Current: impl}
 }
 
 func addBaseHeaders(headers http.Header) {
@@ -119,7 +121,7 @@ func (rc *ResponseController) GetRawData(w http.ResponseWriter, req *http.Reques
 
 // swagger:route GET /info Extractor getExtractorInfo
 //
-// Returns extractor common info
+// Returns extractors common info
 //
 // No additional info
 //
@@ -186,13 +188,13 @@ func (rc *ResponseController) Aggregate(w http.ResponseWriter, req *http.Request
 
 	//switch paramsBody.Type {
 	//case typeInt64:
-	//	result = aggregator.AggregateInt(paramsBody.Values)
+	//	result = aggregators.AggregateInt(paramsBody.Values)
 	//	break
 	//case typeFloat64:
-	//	result = aggregator.AggregateFloat(paramsBody.Values)
+	//	result = aggregators.AggregateFloat(paramsBody.Values)
 	//	break
 	//case typeString:
-	//	result = aggregator.AggregateString(paramsBody.Values)
+	//	result = aggregators.AggregateString(paramsBody.Values)
 	//	break
 	//}
 	result = aggregator.AggregateInt(paramsBody)

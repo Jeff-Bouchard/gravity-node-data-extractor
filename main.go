@@ -1,7 +1,7 @@
 // Package classification Gravity Extractor RPC API.
 //
-// This application represents viable extractor methods.
-// Declared methods are compulsory for appropriate extractor functioning.
+// This application represents viable extractors methods.
+// Declared methods are compulsory for appropriate extractors functioning.
 //
 //
 // Terms Of Service:
@@ -9,7 +9,7 @@
 // there are no TOS at this moment, use at your own risk we take no responsibility
 //
 //     Schemes: http, https
-//     Host: extractor.gravityhub.org
+//     Host: extractors.gravityhub.org
 //     BasePath: /
 //     Version: 1.0
 //     License: MIT http://opensource.org/licenses/MIT
@@ -45,8 +45,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	model "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
 	c "github.com/Gravity-Tech/gravity-node-data-extractor/v2/controller"
+	model "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
 	r "github.com/Gravity-Tech/gravity-node-data-extractor/v2/router"
 	"net/http"
 )

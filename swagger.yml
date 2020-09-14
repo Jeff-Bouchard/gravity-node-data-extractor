@@ -22,7 +22,7 @@ info:
     name: MIT
     url: 'http://opensource.org/licenses/MIT'
   version: '1.0'
-host: extractor.gravityhub.org
+host: extractors.gravityhub.org
 basePath: /
 paths:
   /extracted:
@@ -60,7 +60,7 @@ paths:
         - https
       tags:
         - Extractor
-      summary: Returns extractor common info
+      summary: Returns extractors common info
       operationId: getExtractorInfo
       responses:
         '200':
@@ -93,7 +93,7 @@ definitions:
       Tag:
         type: string
         x-go-name: SymbolPair
-    x-go-package: _/usr/local/var/www/gravity-node-data-extractor/model
+    x-go-package: _/usr/local/var/www/gravity-node-data-extractors/model
   BinancePriceIndexResponse:
     type: object
     properties:
@@ -107,7 +107,7 @@ definitions:
       symbol:
         type: string
         x-go-name: Symbol
-    x-go-package: _/usr/local/var/www/gravity-node-data-extractor/model
+    x-go-package: _/usr/local/var/www/gravity-node-data-extractors/model
   ExtractorInfo:
     type: object
     properties:
@@ -115,7 +115,7 @@ definitions:
         type: string
       Description:
         type: string
-    x-go-package: _/usr/local/var/www/gravity-node-data-extractor/model
+    x-go-package: _/usr/local/var/www/gravity-node-data-extractors/model
 securityDefinitions:
   api_key:
     type: apiKey

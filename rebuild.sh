@@ -3,7 +3,7 @@
 branch="$1"
 image_tag='master'
 organization='gravityhuborg'
-image_name='gravity-data-extractor'
+image_name='gravity-data-extractors'
 
 port=8099
 
