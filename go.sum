@@ -1,4 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/Gravity-Hub-Org/gateway-contract v0.0.0-20200915150549-a3971887dd0a h1:eY+9qHlbXqlwNqV0yyWlcBHwYW/TEA0YRx9xla331j8=
+github.com/Gravity-Hub-Org/gateway-contract v0.0.0-20200915150549-a3971887dd0a/go.mod h1:Q6yruUN2TWZlIfAEsspQutW3TjUHgadLRICtsDGBZrY=
 github.com/PuerkitoBio/purell v1.1.0/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
 github.com/PuerkitoBio/purell v1.1.1 h1:WEQqlqaGbrPkxLJWfBwQmfEAE1Z7ONdDLqrN38tNFfI=
 github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=

@@ -13,9 +13,7 @@ import (
 	waves "github.com/Gravity-Tech/gravity-node-data-extractor/v2/swagger-types/models"
 
 	//wavesplatform "github.com/wavesplatform/go-lib-crypto"
-
 )
-
 
 const (
 	TransferStatusNew = 1
@@ -39,17 +37,12 @@ func (extractor *IBPortWavesToEthereumExtractor) Description() string {
 	return "This extractor represents IBPort for source chain: WAVES and destination chain: ETH"
 }
 
-type transferRequest struct {
-	Amount, RequestID, Receiver string
-}
-
-
-func (request *transferRequest) BytesForWAVES() ([]byte, error) {
+func (request *TransferRecord) BytesForWAVES() ([]byte, error) {
 	var result []byte
 
 	byteBeginning := []byte("m")
 
-	byteRqId, err := base58.Decode(request.RequestID)
+	byteRqId, err := base58.Decode(string(request.RequestID))
 	if err != nil { return nil, err }
 
 	byteAmount := []byte(request.Amount)
@@ -65,7 +58,7 @@ func (request *transferRequest) BytesForWAVES() ([]byte, error) {
 	return result, nil
 }
 
-func (request *transferRequest) BytesForETH() ([]byte, error) {
+func (request *TransferRecord) BytesForETH() ([]byte, error) {
 	var result []byte
 
 	byteBeginning := []byte("c")
@@ -133,78 +126,77 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 	resultAn := make([]byte, len(addressData))
 	resultBn := make([]byte, len(addressData))
 
-	//
-	// aN: Computing
-	//
-	// Taking only new entries - waiting for processing
-	newStatusEntries := filterEntries(addressData, func(entry *waves.DataEntry) bool {
-		return strings.Contains(*entry.Key, "rq_status_") && entry.Value.(int) == TransferStatusNew
-	})
 
+	// Populate
 	//
 	// aN: Forming transferRequests + mapping to string
 	//
-	for _, entry := range newStatusEntries {
-		entryRqId := strings.Split(*entry.Key, "_")[2]
+	wavesRecordHashmap := extractor.hashmap()
+	wavesRecordHashmap.Populate(addressData)
 
-		amount := resolveEntry(addressData, "rq_amount_" + entryRqId).Value.(string)
-		receiver := resolveEntry(addressData, "rq_receiver" + entryRqId).Value.(string)
-		resultRequest := &transferRequest{
-			Amount:    amount,
-			RequestID: entryRqId,
-			Receiver:  receiver,
-		}
+	currentRequestID := RequestID(wavesRecordHashmap.FirstRequest())
 
-		// EXPLICIT ERROR IGNORE
-		resultString, _ := resultRequest.BytesForWAVES()
+	var newStatusRequests []RequestID
 
-		resultAn = append(resultAn, resultString...)
-	}
+	for {
+		if currentRequestID == "" { break }
 
-	//
-	// bN: Computing - ?
-	//
+		transferRequest := wavesRecordHashmap.ByID(currentRequestID)
 
-	//
-	// bN: Forming transferRequests + mapping to string
-	//
-	// WAVES ENTRIES ARE JUST FOR EXAMPLE
-	for _, entry := range newStatusEntries {
-		entryRqId := strings.Split(*entry.Key, "_")[2]
+		//
+		// aN: Computing
+		//
+		// Taking only new entries - waiting for processing
+		//
+		if transferRequest.Status == TransferStatusNew {
+			//entryRqId := strings.Split(*entry.Key, "_")[2]
 
-		amount := resolveEntry(addressData, "rq_amount_" + entryRqId).Value.(string)
-		receiver := resolveEntry(addressData, "rq_receiver" + entryRqId).Value.(string)
-		status := resolveEntry(addressData, "rq_status" + entryRqId).Value.(string)
-
-		resultRequest := &transferRequest{
-			Amount:    amount,
-			RequestID: entryRqId,
-			Receiver:  receiver,
-		}
-
-		if status == string(TransferStatusCompleted) {
 			// EXPLICIT ERROR IGNORE
-			resultString, _ := resultRequest.BytesForETH()
+			resultString, _ := transferRequest.BytesForWAVES()
 
-			resultBn = append(resultBn, resultString...)
+			newStatusRequests = append(newStatusRequests, transferRequest.RequestID)
+			resultAn = append(resultAn, resultString...)
 		}
+
+		currentRequestID = transferRequest.Next
 	}
+	//
+	////
+	//// bN: Computing - ?
+	////
+	//
+	////
+	//// bN: Forming transferRequests + mapping to string
+	////
+	//// WAVES ENTRIES ARE JUST FOR EXAMPLE
+	//for _, entryID := range newStatusRequests {
+	//	//entryRqId := strings.Split(*entry.Key, "_")[2]
+	//	//
+	//	//amount := resolveEntry(addressData, "rq_amount_" + entryRqId).Value.(string)
+	//	//receiver := resolveEntry(addressData, "rq_receiver" + entryRqId).Value.(string)
+	//	//status := resolveEntry(addressData, "rq_status" + entryRqId).Value.(string)
+	//	instance := wavesRecordHashmap.ByID(entryID)
+	//
+	//	resultRequest := &transferRequest{
+	//		Amount:    amount,
+	//		RequestID: entryRqId,
+	//		Receiver:  receiver,
+	//	}
+	//
+	//	if status == string(TransferStatusCompleted) {
+	//		// EXPLICIT ERROR IGNORE
+	//		resultString, _ := resultRequest.BytesForETH()
+	//
+	//		resultBn = append(resultBn, resultString...)
+	//	}
+	//}
+	//
+	//finalResult := append(resultAn, resultBn...)
+	//
+	//return finalResult, finalResult
 
-	finalResult := append(resultAn, resultBn...)
-
-	return finalResult, finalResult
+	return nil, nil
 }
-
-func base58ToBytes(rqId string) string {
-	return ""
-}
-func toBytes32(amount string) string {
-	return ""
-}
-func hexToBytes(receiver string) string {
-	return ""
-}
-
 
 func (extractor *IBPortWavesToEthereumExtractor) Info() *extractors.ExtractorInfo {
 	return &extractors.ExtractorInfo{
@@ -219,6 +211,10 @@ func (extractor *IBPortWavesToEthereumExtractor) ethereumClient() interface{} {
 
 func (extractor *IBPortWavesToEthereumExtractor) wavesClient() *fetch.WavesStateFetcher {
 	return &fetch.WavesStateFetcher{}
+}
+
+func (extractor *IBPortWavesToEthereumExtractor) hashmap() *WavesIBPortHashmap {
+	return &WavesIBPortHashmap{}
 }
 
 type IBPortWavesToEthereumAggregator struct {
