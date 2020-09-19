@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	m "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
-	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/ibport"
 	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/luport"
 )
 
@@ -31,11 +30,13 @@ func (rc *ResponseController) extractor() *extractor.Provider {
 	var impl extractor.IExtractor
 
 	switch enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType) {
-	case enumerator.IbportWavesEth:
-		impl = &ibport.IBPortWavesToEthereumExtractor{ Config: rc.Config }
-	case enumerator.LuportWavesEth:
+	case enumerator.LUportWavesEth:
 		impl = &luport.LUPortWavesToEthereumExtractor{ Config: rc.Config }
+	//case enumerator.LU:
+	//	impl = &luport2.LUPortWavesToEthereumExtractor{ Config: rc.Config }
 	}
+
+	fmt.Printf("Type: %v; Enum: %v \n", rc.TagDelegate.ExtractorType, enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType))
 
 	return &extractor.Provider{Current: impl}
 }

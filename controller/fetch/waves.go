@@ -3,20 +3,22 @@ package fetch
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	waves "github.com/Gravity-Tech/gravity-node-data-extractor/v2/swagger-types/models"
 )
 
-const nodeUrl = "https://nodes.wavesplatform.com"
-
-type WavesStateFetcher struct {}
+type WavesStateFetcher struct {
+	NodeURL string
+}
 
 func (fetcher *WavesStateFetcher) fetch(path string) (*http.Response, error) {
-	return http.Get(nodeUrl + path)
+	return http.Get(fetcher.NodeURL + path)
 }
 
 func (fetcher *WavesStateFetcher) FetchAddressData(address string) ([]*waves.DataEntry, error) {
-	response, err := fetcher.fetch(fmt.Sprintf("/addresses/data/%v", address))
+	requestURL := fmt.Sprintf("/addresses/data/%v", address)
+	response, err := fetcher.fetch(requestURL)
 
 	if err != nil {
 		return nil, err
@@ -26,7 +28,9 @@ func (fetcher *WavesStateFetcher) FetchAddressData(address string) ([]*waves.Dat
 
 	defer response.Body.Close()
 
-	decodeErr := json.NewDecoder(response.Body).Decode(&result)
+	byteValue, _ := ioutil.ReadAll(response.Body)
+
+	decodeErr := json.Unmarshal(byteValue, &result)
 
 	if decodeErr != nil { 
 		return nil, decodeErr

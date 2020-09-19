@@ -22,5 +22,5 @@ type ExtractorInfo struct {
 
 type ExtractorEnumeration = string
 type ExtractorEnumerator struct {
-	IbportWavesEth, LuportWavesEth ExtractorEnumeration
+	IBportWavesEth, LUportWavesEth, IBportEthWaves, LUportEthWaves ExtractorEnumeration
 }

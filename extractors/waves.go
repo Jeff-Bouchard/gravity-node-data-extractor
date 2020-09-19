@@ -1,12 +1,16 @@
 package extractors
 
+import "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
+
 var DefaultExtractorEnumerator = &ExtractorEnumerator{
-	IbportWavesEth: "IB_Port_WAVES_to_ETH",
-	LuportWavesEth: "LU_Port_WAVES_to_ETH",
+	IBportWavesEth: "IB_Port_WAVES_ETH",
+	LUportWavesEth: "LU_Port_WAVES_ETH",
+	IBportEthWaves: "IB_Port_ETH_WAVES",
+	LUportEthWaves: "LU_Port_ETH_WAVES",
 }
 
 func (e *ExtractorEnumerator) Default() ExtractorEnumeration {
-	return e.IbportWavesEth
+	return e.LUportWavesEth
 }
 
 func (e *ExtractorEnumerator) TypeAvailable(enum ExtractorEnumeration) bool {
@@ -20,17 +24,23 @@ func (e *ExtractorEnumerator) TypeAvailable(enum ExtractorEnumeration) bool {
 
 func (e *ExtractorEnumerator) Available() []ExtractorEnumeration {
 	return []string {
-		DefaultExtractorEnumerator.IbportWavesEth,
-		DefaultExtractorEnumerator.LuportWavesEth,
+		DefaultExtractorEnumerator.IBportWavesEth,
+		DefaultExtractorEnumerator.LUportWavesEth,
+		DefaultExtractorEnumerator.IBportEthWaves,
+		DefaultExtractorEnumerator.LUportEthWaves,
 	}
 }
 
 func (e *ExtractorEnumerator) MatchArgumentEnumeration (enumeration ExtractorEnumeration) ExtractorEnumeration {
 	switch enumeration {
-	case "ib-waves-eth":
-		return DefaultExtractorEnumerator.IbportWavesEth
-	case "lu-waves-eth":
-		return DefaultExtractorEnumerator.LuportWavesEth
+	case model.LUPortEthWaves:
+		return DefaultExtractorEnumerator.LUportEthWaves
+	case model.LUPortWavesEth:
+		return DefaultExtractorEnumerator.LUportWavesEth
+	case model.IBPortEthWaves:
+		return DefaultExtractorEnumerator.IBportEthWaves
+	case model.IBPortWavesEth:
+		return DefaultExtractorEnumerator.IBportWavesEth
 	}
 
 	return ""

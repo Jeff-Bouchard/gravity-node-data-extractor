@@ -5,7 +5,7 @@ import (
 	godotenv "github.com/joho/godotenv"
 	"os"
 	//"strings"
-	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/utils"
+	//"github.com/Gravity-Tech/gravity-node-data-extractor/v2/utils"
 	// "strings"
 )
 
@@ -23,15 +23,22 @@ var availableExtractorPortTypes = []string {
 }
 
 type Config struct {
-	SourceSCAddress string
-	DestinationSCAddress string
+	SourceChainNodeUrl string
+	DestinationChainNodeUrl string
+
+	SourceLUPortAddress string
+	SourceIBPortAddress string
+	DestinationLUPortAddress string
+	DestinationIBPortAddress string
 }
 
 func (config *Config) Validate () error {
 
 	values := map[string]string {
-		"SourceSCAddress": config.SourceSCAddress,
-		"DestinationSCAddress": config.DestinationSCAddress,
+		"SourceLUPortAddress": config.SourceLUPortAddress,
+		"SourceIBPortAddress": config.SourceIBPortAddress,
+		"DestinationLUPortAddress": config.DestinationLUPortAddress,
+		"DestinationIBPortAddress": config.DestinationIBPortAddress,
 	}
 
 	for key, value := range values {
@@ -50,9 +57,13 @@ type ConfigBuilder struct {
 func (c *ConfigBuilder) GenerateFromEnvironment () *Config {
 	extractorType := c.ExtractorType
 
-
-
-	if !utils.ContainsString(availableExtractorPortTypes, extractorType) {
+	isAvailable := false
+	for _, availableType := range availableExtractorPortTypes {
+		if availableType == extractorType {
+			isAvailable = true
+		}
+	}
+	if !isAvailable {
 		fmt.Errorf("Extractor port type is unavailable: %v \n", extractorType)
 		panic(1)
 	}
@@ -64,7 +75,11 @@ func (c *ConfigBuilder) GenerateFromEnvironment () *Config {
 	}
 	
 	return &Config {
-		SourceSCAddress: os.Getenv("SOURCE_SC_ADDRESS"),
-		DestinationSCAddress: os.Getenv("DESTINATION_SC_ADDRESS"),
+		SourceChainNodeUrl: os.Getenv("SOURCE_CHAIN_PUBLIC_NODE"),
+		DestinationChainNodeUrl: os.Getenv("DESTINATION_CHAIN_PUBLIC_NODE"),
+		SourceLUPortAddress: os.Getenv("SOURCE_LU_PORT"),
+		SourceIBPortAddress: os.Getenv("SOURCE_IB_PORT"),
+		DestinationLUPortAddress: os.Getenv("DESTINATION_LU_PORT"),
+		DestinationIBPortAddress: os.Getenv("DESTINATION_IB_PORT"),
 	}
 }
