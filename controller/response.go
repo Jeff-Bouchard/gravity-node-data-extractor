@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/aggregators"
 	extractor "github.com/Gravity-Tech/gravity-node-data-extractor/v2/extractors"
+	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/ibport"
+	//"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/luport"
 	"net/http"
 
 	m "github.com/Gravity-Tech/gravity-node-data-extractor/v2/model"
-	"github.com/Gravity-Tech/gravity-node-data-extractor/v2/model/luport"
 )
 
 type ResponseController struct {
@@ -30,10 +31,10 @@ func (rc *ResponseController) extractor() *extractor.Provider {
 	var impl extractor.IExtractor
 
 	switch enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType) {
-	case enumerator.LUportWavesEth:
-		impl = &luport.LUPortWavesToEthereumExtractor{ Config: rc.Config }
-	//case enumerator.LU:
-	//	impl = &luport2.LUPortWavesToEthereumExtractor{ Config: rc.Config }
+	case enumerator.IBportWavesEth:
+		impl = &ibport.IBPortWavesToEthereumExtractor{ Config: rc.Config }
+	//case enumerator.LUportWavesEth:
+	//	impl = &luport.LUPortWavesToEthereumExtractor{ Config: rc.Config }
 	}
 
 	fmt.Printf("Type: %v; Enum: %v \n", rc.TagDelegate.ExtractorType, enumerator.MatchArgumentEnumeration(rc.TagDelegate.ExtractorType))
@@ -77,10 +78,8 @@ func (rc *ResponseController) GetExtractedData(w http.ResponseWriter, req *http.
 
 	addBaseHeaders(w.Header())
 
-	b, _ := json.Marshal(&DataRs{
-		Value: extractedData,
-	})
-	_, _ = fmt.Fprint(w, string(b))
+	b, _ := json.Marshal(extractedData)
+	_, _ = fmt.Fprint(w, b)
 }
 
 // swagger:route GET /raw Extractor getRawData

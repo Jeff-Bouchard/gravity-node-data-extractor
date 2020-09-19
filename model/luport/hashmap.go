@@ -23,7 +23,7 @@ func getRqAmountKey(id: String) = "rq_amount_" + id
 func getRqStatusKey(id: String) = "rq_status_" + id
 func getRqTypeKey(id: String) = "rq_type_" + id
 
- */
+*/
 
 type Hashmap interface {}
 
@@ -42,7 +42,7 @@ let UNLOCK = 2
 #----Types--------
 let LOCKTYPE = 1
 let UNLOCKTYPE = 2
- */
+*/
 
 const (
 	firstRqKey = "first_rq"
@@ -61,29 +61,29 @@ type TransferRecord struct {
 	Type int
 }
 
-type WavesLUPortHashmap struct {
+type WavesStateHashmap struct {
 	isInitialized bool
 	hashmap map[RequestID]*TransferRecord
 	firstRq, lastRq, nebulaAddress string
 }
 
-func (hashmap *WavesLUPortHashmap) ByID (id RequestID) *TransferRecord {
+func (hashmap *WavesStateHashmap) ByID (id RequestID) *TransferRecord {
 	return hashmap.hashmap[id]
 }
 
-func (hashmap *WavesLUPortHashmap) FirstRequest () string {
+func (hashmap *WavesStateHashmap) FirstRequest () string {
 	return hashmap.firstRq
 }
 
-func (hashmap *WavesLUPortHashmap) LastRequest () string {
+func (hashmap *WavesStateHashmap) LastRequest () string {
 	return hashmap.lastRq
 }
 
-func (hashmap *WavesLUPortHashmap) NebulaAddress () string {
+func (hashmap *WavesStateHashmap) NebulaAddress () string {
 	return hashmap.nebulaAddress
 }
 
-func (hashmap *WavesLUPortHashmap) handleDynamicKeyRecord(record *waves.DataEntry) {
+func (hashmap *WavesStateHashmap) handleDynamicKeyRecord(record *waves.DataEntry) {
 	splittedKey := strings.Split(*record.Key, "_")
 	requestID := RequestID(splittedKey[len(splittedKey) - 1])
 
@@ -115,7 +115,7 @@ func (hashmap *WavesLUPortHashmap) handleDynamicKeyRecord(record *waves.DataEntr
 	hashmap.hashmap[requestID] = hashmapRecord
 }
 
-func (hashmap *WavesLUPortHashmap) Populate (values []*waves.DataEntry) {
+func (hashmap *WavesStateHashmap) Populate (values []*waves.DataEntry) {
 	if !hashmap.isInitialized {
 		hashmap.hashmap = make(map[RequestID]*TransferRecord, len(values))
 		hashmap.isInitialized = true

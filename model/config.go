@@ -75,8 +75,8 @@ func (c *ConfigBuilder) GenerateFromEnvironment () *Config {
 	}
 	
 	return &Config {
-		SourceChainNodeUrl: os.Getenv("SOURCE_CHAIN_PUBLIC_NODE"),
-		DestinationChainNodeUrl: os.Getenv("DESTINATION_CHAIN_PUBLIC_NODE"),
+		SourceChainNodeUrl: os.Getenv("SOURCE_CHAIN_NODE_URL"),
+		DestinationChainNodeUrl: os.Getenv("DESTINATION_CHAIN_NODE_URL"),
 		SourceLUPortAddress: os.Getenv("SOURCE_LU_PORT"),
 		SourceIBPortAddress: os.Getenv("SOURCE_IB_PORT"),
 		DestinationLUPortAddress: os.Getenv("DESTINATION_LU_PORT"),
