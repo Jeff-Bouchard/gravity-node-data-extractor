@@ -161,8 +161,6 @@ func (extractor *IBPortWavesToEthereumExtractor) Data() (interface{}, interface{
 
 	ibContract, _ := extractor.ibContract()
 
-	requestCreated, _ := ibContract.IBPortFilterer.ParseRequestCreated(types.Log{})
-
 	//
 	////
 	//// bN: Computing - ?
